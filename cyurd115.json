@@ -1,0 +1,31 @@
+const portsin_t inpo {
+  0, //DS18b20a
+  0, //DS18b20b
+  0, //dht11
+  A0, //ANALOG
+  0, //SPIdo
+  0, //SPIcs
+  0};//shares i2c D2 and D1
+/*SE constant declarations*/  
+const sen_t SE {
+  1,//number of different sensor types
+  1,//number of sensors(numsens)
+  {
+    {1, {0}, "hygrometer", "ANALOG"},
+  }
+};
+/*------------------------------------------------------
+CONFIG extern structures (initial values, changeable)*/
+/*srs extern data structure initalization
+state of relays and sensors */ 
+srs_t srs {
+  1,//numsr
+  1,//sumse
+  {{0,45,1,0}},//assumes SCL is D1(5) and SDA is D2(4)
+  0, //numcs
+  {},
+  0,//numti
+  {}
+};
+
+["admin", "base", "shrooms", "hvac", "lightsoff", "timr"]
