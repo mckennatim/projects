@@ -16,8 +16,8 @@ std::vector<Sensor*> sensors;
 StateManager stateManager;
 
 // --- Buffer Sizes for Request Handling ---
-#define REQ_BUFFER_SIZE 512
-#define RESP_BUFFER_SIZE 800
+#define REQ_BUFFER_SIZE 256
+#define RESP_BUFFER_SIZE 512
 
 // --- State Request Handler ---
 

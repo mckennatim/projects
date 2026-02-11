@@ -8,18 +8,6 @@
 #define MQTT_USER       "tim@sitebuilt.net"
 #define MQTT_PASS       "geniot"
 
-// --- MQTT Subscription Topics ---
-#define NUMTOPICS 5
-#define MAXSSTR 20
-
-static const char subTopics[NUMTOPICS][MAXSSTR] = {
-    "devtime",  // Time sync - all devices listen
-    "cmd",      // Commands from web app
-    "prg",      // Program/configuration updates
-    "req",      // State requests
-    "set"       // Settings
-};
-
 // --- Initial Connection Message ---
 #define MSG_TIME_TOPIC   "time"
 #define MSG_TIME_PAYLOAD "in mq.reconn->devid/time, <-/prg&/devtime"

@@ -4,7 +4,6 @@
 #include <Wire.h>
 #include "Config.h"
 #include "MqttManager.h"
-#include "StateManager.h"
 
 // Provide access to the shared instance if needed globally, 
 // or pass it in. We'll pass it in.
@@ -13,7 +12,6 @@ class CTSensor : public Sensor {
 private:
     Adafruit_ADS1115* _ads;
     MqttManager* _mqtt;
-    StateManager* _stateMgr;
     CT_Config _config;
     
     // Runtime state
@@ -51,8 +49,8 @@ private:
     }
     
 public:
-    CTSensor(MqttManager* mqtt, Adafruit_ADS1115* ads, CT_Config config, StateManager* stateMgr)
-        : _mqtt(mqtt), _ads(ads), _config(config), _stateMgr(stateMgr) {}
+    CTSensor(MqttManager* mqtt, Adafruit_ADS1115* ads, CT_Config config)
+        : _mqtt(mqtt), _ads(ads), _config(config) {}
 
     void setup() override {
         // Individual setup if needed
@@ -123,11 +121,6 @@ public:
 
                     Serial.printf("%d %s Val: %.2f A\n", _config.pin, _config.name, current);
 
-                    // Update state manager (always, even if not publishing)
-                    if (_stateMgr) {
-                        _stateMgr->updateState(_config.sa, current, _config.name);
-                    }
-
                     if (abs(current - _lastReportedValue) > _config.threshold) {
                         _lastReportedValue = current;
                         
@@ -156,7 +149,7 @@ float CTSensor::_zeroOffsetADC = 0.0;
 
 class CTFactory {
 public:
-    static void load(std::vector<Sensor*>& sensors, MqttManager* mqtt, StateManager* stateMgr) {
+    static void load(std::vector<Sensor*>& sensors, MqttManager* mqtt) {
         Serial.println(">>> CTFactory::load (Initializing Hardware)");
         
         // 1. Initialize Hardware (Single Instance)
@@ -184,7 +177,7 @@ public:
             }
 
             Serial.printf("Creating CT Sensor: %s (Pin %d)\n", cfg.name, cfg.pin);
-            CTSensor* s = new CTSensor(mqtt, ads, cfg, stateMgr);
+            CTSensor* s = new CTSensor(mqtt, ads, cfg);
             sensors.push_back(s);
         }
         Serial.println(">>> CTFactory::load Complete");

@@ -2,7 +2,7 @@
 
 // --- Device Identity ---
 // These match your specific request
-#define DEV_ID          "CYURD131"
+#define DEV_ID          "CYURD130"
 #define MQTT_SERVER     "sitebuilt.net"
 #define MQTT_PORT       1884
 #define MQTT_USER       "tim@sitebuilt.net"
@@ -18,30 +18,9 @@
 
 // ----Sensor Configuration ----
 // ----ct sensor
-#define USE_CT_SENSORS  // <--- Enable CT Sensor Block
-#ifdef USE_CT_SENSORS
-#include <Adafruit_ADS1X15.h>
+#define USE_ONEWIRE_SENSORS  // <--- Enable CT Sensor Block
+#ifdef USE_ONEWIRE_SENSORS
+#include <DallasTemperature.h>
+#include <OneWire.h>
 
-#define I2C_SDA 21  // Default for ESP32 (Original)
-#define I2C_SCL 22
 
-struct CT_Config {
-  uint8_t   pin;        // ADS1115 Channel (0-3)
-  adsGain_t gain;       // GAIN_ONE, GAIN_TWO_THIRDS
-  float     lsbVolts;   // The voltage step for that gain (e.g., 0.000125)
-  float     m;          // Slope (Calibration) - MUST be float
-  float     b;          // Intercept (Calibration) - MUST be float
-  int       capacity;   // Metadata (e.g., 30A, 100A)
-  float     threshold;
-  const char* name;     // Optional: Label for logging
-  bool     rec;
-};
-
-// static: Prevents "multiple definition" errors when included in multiple files (Internal Linkage)
-static const CT_Config ct_sensors[4] = {
-  {0, GAIN_ONE, 0.0001875,  104.7, 0.922, 15, .3, "ASHP-fl1", true},
-  {1, GAIN_ONE, 0.0001875,  104.7, 0.922, 15, .3, "Solar-12pv", true},
-  {2, GAIN_ONE, 0.0001875,  104.7, 0.922, 50, .3, "EV-charger", true}, 
-  {3, GAIN_ONE, 0.0001875,  104.7, 0.922, 15, .3, "Boiler", true},
-};
-#endif // USE_CT_SENSORS
